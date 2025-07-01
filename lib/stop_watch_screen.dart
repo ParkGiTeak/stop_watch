@@ -13,14 +13,14 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
   Timer? _timer;
 
   int _time = 0;
-  bool _isRunnung = false;
+  bool _isRunning = false;
 
-  List<String> _lapTimes = [];
+  final List<String> _lapTimes = [];
 
   void _clickButton() {
-    _isRunnung = !_isRunnung;
+    _isRunning = !_isRunning;
 
-    if (_isRunnung) {
+    if (_isRunning) {
       _start();
     } else {
       _pause();
@@ -35,15 +35,19 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
     });
   }
 
+  void _pause() {
+    _timer?.cancel();
+  }
+
   void _reset() {
-    _isRunnung = false;
+    _isRunning = false;
     _timer?.cancel();
     _lapTimes.clear();
     _time = 0;
   }
 
-  void _pause() {
-    _timer?.cancel();
+  void _recordLapTime(String time) {
+    _lapTimes.insert(0, '${_lapTimes.length + 1}등 $time');
   }
 
   @override
@@ -55,8 +59,10 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
   @override
   Widget build(BuildContext context) {
     int sec = _time ~/ 100;
-    String hundredth = '${_time % 100}'
-        .padLeft(2, '0'); // 2 자리로 표출하고 1자리면 앞에 (Left)0을 붙인다.
+    String hundredth = '${_time % 100}'.padLeft(
+      2,
+      '0',
+    ); // 2 자리로 표출하고 1자리면 앞에 (Left)0을 붙인다.
 
     return Scaffold(
       appBar: AppBar(
@@ -82,34 +88,15 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
           ),
           SizedBox(
             width: 100,
-            height: 100,
+            height: 200,
             child: ListView(
-              children: [
-                Center(
-                  child: Text('111'),
-                ),
-                Center(
-                  child: Text('222'),
-                ),
-                Center(
-                  child: Text('333'),
-                ),
-                Center(
-                  child: Text('444'),
-                ),
-                Center(
-                  child: Text('555'),
-                ),
-                Center(
-                  child: Text('666'),
-                ),
-                Center(
-                  child: Text('777'),
-                ),
-                Center(
-                  child: Text('888'),
-                ),
-              ],
+              children: _lapTimes
+                  .map(
+                    (time) => Center(
+                      child: Text(time),
+                    ),
+                  )
+                  .toList(),
             ),
           ),
           Spacer(), // 빈 공간을 차지
@@ -131,11 +118,15 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
                     _clickButton();
                   });
                 },
-                child: _isRunnung ? Icon(Icons.pause) : Icon(Icons.play_arrow),
+                child: _isRunning ? Icon(Icons.pause) : Icon(Icons.play_arrow),
               ),
               FloatingActionButton(
                 backgroundColor: Colors.green,
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    _recordLapTime('$sec.$hundredth');
+                  });
+                },
                 child: Icon(Icons.add),
               ),
             ],
