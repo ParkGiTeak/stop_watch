@@ -1,16 +1,13 @@
 # stop_watch
 
-A new Flutter project.
+* Flutter Study
+  - ListView
+  - Spacer
+* Dart Study
+  - Timer
+  - String.padLeft
+  - ~/ (나눈값의 몫)
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+### 위에 정렬된 내용을 사용하여 스톱워치 기능을 제공하는 Android, iOS, Web Flutter App Study
+- [참고 강의](https://www.inflearn.com/course/플러터-초입문-왕초보/dashboard)
