@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class StopWatchScreen extends StatefulWidget {
@@ -8,11 +10,50 @@ class StopWatchScreen extends StatefulWidget {
 }
 
 class _StopWatchScreenState extends State<StopWatchScreen> {
+  Timer? _timer;
+
+  int _time = 0;
+  bool _isRunnung = false;
+
+  List<String> _lapTimes = [];
+
+  void _clickButton() {
+    _isRunnung = !_isRunnung;
+
+    if (_isRunnung) {
+      _start();
+    } else {
+      _pause();
+    }
+  }
+
+  void _start() {
+    _timer = Timer.periodic(Duration(microseconds: 10), (timer) {
+      setState(() {
+        _time++;
+      });
+    });
+  }
+
+  void _pause() {
+    _timer?.cancel();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    int sec = _time ~/ 100;
+    String hundredth = '${_time % 100}'
+        .padLeft(2, '0'); // 2 자리로 표출하고 1자리면 앞에 (Left)0을 붙인다.
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('스탑워치'),
+        title: Text('스톱워치'),
       ),
       body: Column(
         children: [
@@ -24,11 +65,11 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '0',
+                '$sec',
                 style: TextStyle(fontSize: 50),
               ),
               Text(
-                '00',
+                hundredth,
               ),
             ],
           ),
@@ -37,14 +78,30 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
             height: 100,
             child: ListView(
               children: [
-                Center(child: Text('111'),),
-                Center(child: Text('222'),),
-                Center(child: Text('333'),),
-                Center(child: Text('444'),),
-                Center(child: Text('555'),),
-                Center(child: Text('666'),),
-                Center(child: Text('777'),),
-                Center(child: Text('888'),),
+                Center(
+                  child: Text('111'),
+                ),
+                Center(
+                  child: Text('222'),
+                ),
+                Center(
+                  child: Text('333'),
+                ),
+                Center(
+                  child: Text('444'),
+                ),
+                Center(
+                  child: Text('555'),
+                ),
+                Center(
+                  child: Text('666'),
+                ),
+                Center(
+                  child: Text('777'),
+                ),
+                Center(
+                  child: Text('888'),
+                ),
               ],
             ),
           ),
@@ -58,8 +115,12 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
                 child: Icon(Icons.refresh),
               ),
               FloatingActionButton(
-                onPressed: () {},
-                child: Icon(Icons.play_arrow),
+                onPressed: () {
+                  setState(() {
+                    _clickButton();
+                  });
+                },
+                child: _isRunnung ? Icon(Icons.pause) : Icon(Icons.play_arrow),
               ),
               FloatingActionButton(
                 backgroundColor: Colors.green,
